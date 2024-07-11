@@ -40,3 +40,45 @@ Sport sports[4] = {
     {"Swimming", 20, 0, 0},
     {"Soccer", 20, 0, 0}
 };
+void addStudent() {
+    static int studentCount = 0;
+    cout << "Enter first name: ";
+    cin >> students[studentCount].firstName;
+    cout << "Enter surname: ";
+    cin >> students[studentCount].surname;
+    cout << "Enter gender (M/F): ";
+    cin >> students[studentCount].gender;
+    cout << "Enter age: ";
+    cin >> students[studentCount].age;
+    cout << "Enter group (1/2/3): ";
+    cin >> students[studentCount].group;
+    cout << "Do you want to participate in a sport? (Y/N): ";
+    char sportChoice;
+    cin >> sportChoice;
+    if (sportChoice == 'Y') {
+        cout << "Choose a sport \n 1. Rugby \n 2. Athletics \n 3. Swimming \n 4. Soccer: ";
+        int sportIndex;
+        cin >> sportIndex;
+        students[studentCount].sport = sports[sportIndex - 1].name;
+        cout << "Do you want to join a club? (Y/N): ";
+        char clubChoice;
+        cin >> clubChoice;
+        if (clubChoice == 'Y') {
+            cout << "Choose a club \n 1. Journalism Club \n 2. Red Cross Society \n 3. AISEC \n 4. Business Club \n 5. Computer Science Club: ";
+            int clubIndex;
+            cin >> clubIndex;
+            students[studentCount].club1 = clubs[clubIndex - 1].name;
+            cout << "Do you want to join another club? (Y/N): ";
+            char anotherClubChoice;
+            cin >> anotherClubChoice;
+            if (anotherClubChoice == 'Y') {
+                cout << "Choose another club \n 1. Journalism Club \n 2. Red Cross Society \n 3. AISEC \n 4. Business Club \n 5. Computer Science Club: ";
+                int anotherClubIndex;
+                cin >> anotherClubIndex;
+                students[studentCount].club2 = clubs[anotherClubIndex - 1].name;
+                ofstream file;
+                file.open("students.csv");
+                file<<students[studentCount].firstName<<endl<<students[studentCount].surname<<endl<<students[studentCount].gender<<endl<<students[studentCount].age<<endl<<students[studentCount].sport<<endl<<students[studentCount].club1<<endl<<students[studentCount].club2;
+                file.close();
+            }
+        }

@@ -1,0 +1,42 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+
+using namespace std;
+struct Student {
+    string firstName;
+    string surname;
+    char gender;
+    int age;
+    int group;
+    string sport;
+    string club1;
+    string club2;
+};
+struct Club {
+    string name;
+    int capacity;
+    int maleCount;
+    int femaleCount;
+};
+
+struct Sport {
+    string name;
+    int capacity;
+    int maleCount;
+    int femaleCount;
+};
+Student students[150];
+Club clubs[5] = {
+    {"Journalism Club", 60, 0, 0},
+    {"Red Cross Society", 60, 0, 0},
+    {"AISEC", 60, 0, 0},
+    {"Business Club", 60, 0, 0},
+    {"Computer Science Club", 60, 0, 0}
+};
+Sport sports[4] = {
+    {"Rugby", 20, 0, 0},
+    {"Athletics", 20, 0, 0},
+    {"Swimming", 20, 0, 0},
+    {"Soccer", 20, 0, 0}
+};

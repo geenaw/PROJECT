@@ -1,0 +1,190 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <limits>
+
+using namespace std;
+
+struct Student {
+    string firstName;
+    string surname;
+    char gender;
+    int age;
+    int group;
+    string sport;
+    string club1;
+    string club2;
+};
+
+struct Club {
+    string name;
+    int capacity;
+    int maleCount;
+    int femaleCount;
+};
+
+struct Sport {
+    string name;
+    int capacity;
+    int maleCount;
+    int femaleCount;
+};
+
+Student students[150];
+Club clubs[5] = {
+        {"Journalism Club", 60, 0, 0},
+        {"Red Cross Society", 60, 0, 0},
+        {"AISEC", 60, 0, 0},
+        {"Business Club", 60, 0, 0},
+        {"Computer Science Club", 60, 0, 0}
+};
+Sport sports[4] = {
+        {"Rugby", 20, 0, 0},
+        {"Athletics", 20, 0, 0},
+        {"Swimming", 20, 0, 0},
+        {"Soccer", 20, 0, 0}
+};
+
+void addStudent() {
+    static int studentCount = 0;
+
+    if (studentCount >= 150) {
+        cout << "Maximum number of students reached." << endl;
+        return;
+    }
+
+    cout << "Enter first name: ";
+    cin >> students[studentCount].firstName;
+    cout << "Enter surname: ";
+    cin >> students[studentCount].surname;
+
+    cout << "Enter gender (M/F): ";
+    while (true) {
+        cin >> students[studentCount].gender;
+        if (students[studentCount].gender == 'M' || students[studentCount].gender == 'F') {
+            break;
+        } else {
+            cout << "Invalid input. Enter gender (M/F): ";
+        }
+    }
+
+    cout << "Enter age: ";
+    while (!(cin >> students[studentCount].age) || students[studentCount].age <= 0) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid input. Enter age: ";
+    }
+
+    cout << "Enter group (1/2/3): ";
+    while (!(cin >> students[studentCount].group) || students[studentCount].group < 1 || students[studentCount].group > 3) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid input. Enter group (1/2/3): ";
+    }
+
+    cout << "Do you want to participate in a sport? (Y/N): ";
+    char sportChoice;
+    cin >> sportChoice;
+    if (sportChoice == 'Y') {
+        cout << "Choose a sport \n 1. Rugby \n 2. Athletics \n 3. Swimming \n 4. Soccer: ";
+        int sportIndex;
+        while (!(cin >> sportIndex) || sportIndex < 1 || sportIndex > 4) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid input. Choose a sport (1-4): ";
+        }
+        students[studentCount].sport = sports[sportIndex - 1].name;
+    }
+
+    cout << "Do you want to join a club? (Y/N): ";
+    char clubChoice;
+    cin >> clubChoice;
+    if (clubChoice == 'Y') {
+        cout << "Choose a club \n 1. Journalism Club \n 2. Red Cross Society \n 3. AISEC \n 4. Business Club \n 5. Computer Science Club: ";
+        int clubIndex;
+        while (!(cin >> clubIndex) || clubIndex < 1 || clubIndex > 5) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid input. Choose a club (1-5): ";
+        }
+        students[studentCount].club1 = clubs[clubIndex - 1].name;
+
+        cout << "Do you want to join another club? (Y/N): ";
+        char anotherClubChoice;
+        cin >> anotherClubChoice;
+        if (anotherClubChoice == 'Y') {
+            cout << "Choose another club \n 1. Journalism Club \n 2. Red Cross Society \n 3. AISEC \n 4. Business Club \n 5. Computer Science Club: ";
+            int anotherClubIndex;
+            while (!(cin >> anotherClubIndex) || anotherClubIndex < 1 || anotherClubIndex > 5) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid input. Choose another club (1-5): ";
+            }
+            students[studentCount].club2 = clubs[anotherClubIndex - 1].name;
+        }
+    }
+
+    // Write student data to file
+    ofstream file;
+    file.open("students.csv", ios::app);
+    if (!file) {
+        cerr << "Error opening file for writing." << endl;
+        return;
+    }
+    file << students[studentCount].firstName << ","
+         << students[studentCount].surname << ","
+         << students[studentCount].gender << ","
+         << students[studentCount].age << ","
+         << students[studentCount].group << ","
+         << students[studentCount].sport << ","
+         << students[studentCount].club1 << ","
+         << students[studentCount].club2 << endl;
+    file.close();
+
+    studentCount++;
+}
+
+void viewStudents() {
+    cout << "All Students:" << endl;
+    for (int i = 0; i < 150; i++) {
+        if (!students[i].firstName.empty()) {
+            cout << "Name: " << students[i].firstName << " " << students[i].surname << endl;
+            cout << "Gender: " << students[i].gender << endl;
+            cout << "Age: " << students[i].age << endl;
+            cout << "Group: " << students[i].group << endl;
+            cout << "Sport: " << students[i].sport << endl;
+            cout << "Club 1: " << students[i].club1 << endl;
+            cout << "Club 2: " << students[i].club2 << endl;
+            cout << endl;
+        }
+    }
+}
+
+int main() {
+    int choice;
+    do {
+        cout << "1. Add a new student" << endl;
+        cout << "2. View all students" << endl;
+        cout << "3. Exit" << endl;
+        cout << "Enter your choice: ";
+        while (!(cin >> choice) || choice < 1 || choice > 3) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid input. Enter your choice (1-3): ";
+        }
+        switch (choice) {
+            case 1:
+                addStudent();
+                break;
+            case 2:
+                viewStudents();
+                break;
+            case 3:
+                cout << "Exiting..." << endl;
+                break;
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+        }
+    } while (choice != 3);
+    return 0;
+}
